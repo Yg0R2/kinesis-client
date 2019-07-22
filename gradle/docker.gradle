@@ -1,0 +1,22 @@
+apply plugin: 'com.palantir.docker'
+
+ext {
+    explodedJarDir = 'exploded'
+}
+
+task explodeJar(type: Copy) {
+    dependsOn bootJar
+
+    from(zipTree(tasks.bootJar.outputs.files.singleFile))
+    into("build/${explodedJarDir}")
+}
+
+docker {
+    name project.name
+
+    copySpec.from(tasks.explodeJar.outputs).into(explodedJarDir)
+
+    buildArgs([
+            'EXPLODED_JAR_DIR': explodedJarDir
+    ])
+}
