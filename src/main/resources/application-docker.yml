@@ -1,0 +1,4 @@
+aws:
+  cloudWatch.host: "localstack"
+  dynamoDB.host: "localstack"
+  kinesis.host: "localstack"
