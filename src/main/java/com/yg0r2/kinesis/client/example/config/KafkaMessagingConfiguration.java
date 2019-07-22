@@ -9,8 +9,9 @@ import org.springframework.context.annotation.FilterType;
 @ConditionalOnProperty(name = "messaging.implementation", havingValue = "kafka")
 @ComponentScan(basePackages = "com.yg0r2.kinesis.client.example",
     excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.yg0r2.kinesis.client.example.bes.kinesis..*"),
-        @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.yg0r2.kinesis.client.example.aws..*")
+        @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.yg0r2.kinesis.client.example.aws..*"),
+        @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.yg0r2.kinesis.client.example.berps.kinesis..*"),
+        @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.yg0r2.kinesis.client.example.berqfs.kinesis..*")
 })
 public class KafkaMessagingConfiguration {
 

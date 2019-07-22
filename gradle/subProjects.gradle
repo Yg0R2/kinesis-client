@@ -1,0 +1,23 @@
+subprojects {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    bootJar {
+        enabled = false
+    }
+
+    jar {
+        enabled = true
+    }
+
+    test {
+        useTestNG()
+    }
+
+    dependencies {
+        testCompile group: 'org.mockito', name: 'mockito-core', version: '2.23.0'
+        testCompile group: 'org.testng', name: 'testng', version: '+'
+    }
+}

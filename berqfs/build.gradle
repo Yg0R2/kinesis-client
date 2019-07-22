@@ -1,0 +1,6 @@
+dependencies {
+    compile project(':kafka')
+    compile project(':kinesis')
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+}

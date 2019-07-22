@@ -15,6 +15,10 @@ allprojects {
         mavenLocal()
     }
 
+    compileJava {
+        options.compilerArgs << '-Xlint:unchecked'
+    }
+
     dependencies {
         implementation group: 'org.apache.commons', name: 'commons-lang3', version: '+'
 

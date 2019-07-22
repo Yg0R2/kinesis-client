@@ -17,6 +17,6 @@ docker {
     copySpec.from(tasks.explodeJar.outputs).into(explodedJarDir)
 
     buildArgs([
-            'EXPLODED_JAR_DIR': explodedJarDir
+        'EXPLODED_JAR_DIR': explodedJarDir
     ])
 }
