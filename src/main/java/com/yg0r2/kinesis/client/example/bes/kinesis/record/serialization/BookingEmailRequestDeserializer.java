@@ -6,21 +6,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yg0r2.kinesis.client.example.bes.domain.BookingEmailRequest;
 import com.yg0r2.kinesis.client.example.messaging.domain.MessageRecord;
 import com.yg0r2.kinesis.client.example.messaging.record.serialization.MessageRecordDeserializer;
 
 import software.amazon.kinesis.retrieval.KinesisClientRecord;
 
 @Component
-public class KinesisRecordDeserializer implements MessageRecordDeserializer<KinesisClientRecord> {
+public class BookingEmailRequestDeserializer implements MessageRecordDeserializer<KinesisClientRecord> {
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Override
     public MessageRecord deserialize(KinesisClientRecord kinesisClientRecord) {
+        return MessageRecord.builder()
+            .withBookingEmailRequest(getBookingEmailRequest(kinesisClientRecord))
+            .build();
+    }
+
+    private BookingEmailRequest getBookingEmailRequest(KinesisClientRecord kinesisClientRecord) {
         try {
-            return objectMapper.readValue(getBytes(kinesisClientRecord), MessageRecord.class);
+            return objectMapper.readValue(getBytes(kinesisClientRecord), BookingEmailRequest.class);
         }
         catch (IOException exception) {
             throw new RuntimeException(exception);

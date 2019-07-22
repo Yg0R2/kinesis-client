@@ -9,13 +9,15 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yg0r2.kinesis.client.example.messaging.domain.MessageRecord;
+import com.yg0r2.kinesis.client.example.messaging.record.serialization.MessageRecordSerializer;
 
 @Component
-public class KinesisRecordSerializer {
+public class KinesisRecordSerializer implements MessageRecordSerializer<ByteBuffer> {
 
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Override
     public ByteBuffer serialize(MessageRecord messageRecord) {
         byte[] data = getJsonValue(messageRecord);
 

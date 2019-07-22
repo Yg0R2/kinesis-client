@@ -6,7 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.amazonaws.services.kinesis.producer.KinesisProducer;
-import com.yg0r2.kinesis.client.example.bes.kinesis.record.producer.KinesisRecordProducer;
+import com.yg0r2.kinesis.client.example.bes.domain.BookingEmailRequest;
+import com.yg0r2.kinesis.client.example.bes.kinesis.record.producer.BookingEmailRequestProducer;
 import com.yg0r2.kinesis.client.example.bes.kinesis.record.serialization.KinesisRecordSerializer;
 import com.yg0r2.kinesis.client.example.messaging.service.RecordProducer;
 
@@ -22,8 +23,8 @@ public class FastLaneKinesisRecordProducerConfiguration {
     private KinesisRecordSerializer kinesisRecordSerializer;
 
     @Bean
-    public RecordProducer fastLaneRecordProducer() {
-        return new KinesisRecordProducer(fastLaneKinesisProducer, streamName, kinesisRecordSerializer);
+    public RecordProducer<BookingEmailRequest> fastLaneRecordProducer() {
+        return new BookingEmailRequestProducer(fastLaneKinesisProducer, streamName, kinesisRecordSerializer);
     }
 
 }

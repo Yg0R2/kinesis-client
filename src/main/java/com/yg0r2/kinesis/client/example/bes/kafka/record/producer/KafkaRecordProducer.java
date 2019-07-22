@@ -8,7 +8,7 @@ import com.yg0r2.kinesis.client.example.messaging.domain.MessageRecord;
 import com.yg0r2.kinesis.client.example.messaging.service.RecordProducer;
 
 @Component
-public class KafkaRecordProducer implements RecordProducer {
+public class KafkaRecordProducer implements RecordProducer<MessageRecord> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaRecordProducer.class);
 

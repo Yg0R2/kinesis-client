@@ -6,6 +6,7 @@ import org.slf4j.MDC;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.yg0r2.kinesis.client.example.bes.kinesis.record.serialization.KinesisRecordDeserializer;
+import com.yg0r2.kinesis.client.example.messaging.record.serialization.MessageRecordDeserializer;
 import com.yg0r2.kinesis.client.example.messaging.service.RecordProcessor;
 
 import software.amazon.kinesis.exceptions.InvalidStateException;
@@ -16,20 +17,23 @@ import software.amazon.kinesis.lifecycle.events.ProcessRecordsInput;
 import software.amazon.kinesis.lifecycle.events.ShardEndedInput;
 import software.amazon.kinesis.lifecycle.events.ShutdownRequestedInput;
 import software.amazon.kinesis.processor.ShardRecordProcessor;
+import software.amazon.kinesis.retrieval.KinesisClientRecord;
 
 public class KinesisShardRecordProcessor implements ShardRecordProcessor {
 
     private static final String SHARD_ID_MDC_KEY = "ShardId";
     private static final Logger LOGGER = LoggerFactory.getLogger(KinesisShardRecordProcessor.class);
 
-    private final KinesisRecordDeserializer kinesisRecordDeserializer;
+    private final MessageRecordDeserializer<KinesisClientRecord> kinesisClientRecordDeserializer;
     private final RecordProcessor recordProcessor;
     private final ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     private String shardId;
 
-    public KinesisShardRecordProcessor(KinesisRecordDeserializer kinesisRecordDeserializer, RecordProcessor recordProcessor, ThreadPoolTaskExecutor threadPoolTaskExecutor) {
-        this.kinesisRecordDeserializer = kinesisRecordDeserializer;
+    public KinesisShardRecordProcessor(MessageRecordDeserializer<KinesisClientRecord> kinesisClientRecordDeserializer, RecordProcessor recordProcessor,
+        ThreadPoolTaskExecutor threadPoolTaskExecutor) {
+
+        this.kinesisClientRecordDeserializer = kinesisClientRecordDeserializer;
         this.recordProcessor = recordProcessor;
         this.threadPoolTaskExecutor = threadPoolTaskExecutor;
     }
@@ -56,7 +60,7 @@ public class KinesisShardRecordProcessor implements ShardRecordProcessor {
             LOGGER.info("Consuming {} record(s)", processRecordsInput.records().size());
 
             processRecordsInput.records().stream()
-                .map(kinesisRecordDeserializer::deserialize)
+                .map(kinesisClientRecordDeserializer::deserialize)
                 .map(kinesisRecord -> new KinesisRecordProcessorRunnable(kinesisRecord, recordProcessor, shardId))
                 .forEach(threadPoolTaskExecutor::execute);
 

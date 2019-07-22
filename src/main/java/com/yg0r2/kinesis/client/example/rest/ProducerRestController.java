@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yg0r2.kinesis.client.example.bes.domain.BookingEmailRequest;
 import com.yg0r2.kinesis.client.example.bes.domain.ServiceCallContext;
-import com.yg0r2.kinesis.client.example.messaging.service.MessageRecordFactory;
 import com.yg0r2.kinesis.client.example.messaging.service.RecordProducer;
 
 @RestController
@@ -31,9 +30,7 @@ public class ProducerRestController {
     private static final Logger LOGGER  = LoggerFactory.getLogger(ProducerRestController.class);
 
     @Autowired
-    private RecordProducer fastLaneRecordProducer;
-    @Autowired
-    private MessageRecordFactory messageRecordFactory;
+    private RecordProducer<BookingEmailRequest> fastLaneRecordProducer;
 
     @GetMapping("/api/producer")
     public String startProducing(@RequestParam(defaultValue = "1") @Min(1) int count) {
@@ -56,6 +53,8 @@ public class ProducerRestController {
             .withRequestId(serviceCallContext.getRequestId())
             .build();
 
+        LOGGER.info("Scheduled producing record: {}", updatedBookingEmailRequest);
+
         publishRecord(updatedBookingEmailRequest);
 
         return HttpStatus.OK;
@@ -73,7 +72,7 @@ public class ProducerRestController {
     }
 
     private void publishRecord(BookingEmailRequest bookingEmailRequest) {
-        fastLaneRecordProducer.produce(messageRecordFactory.create(bookingEmailRequest));
+        fastLaneRecordProducer.produce(bookingEmailRequest);
     }
 
     private BookingEmailRequest createBookingEmailRequest() {

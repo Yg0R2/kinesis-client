@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import com.amazonaws.services.kinesis.producer.KinesisProducer;
 import com.yg0r2.kinesis.client.example.bes.kinesis.record.producer.KinesisRecordProducer;
 import com.yg0r2.kinesis.client.example.bes.kinesis.record.serialization.KinesisRecordSerializer;
+import com.yg0r2.kinesis.client.example.messaging.domain.MessageRecord;
 import com.yg0r2.kinesis.client.example.messaging.service.RecordProducer;
 
 @Configuration
@@ -22,7 +23,7 @@ public class SlowLaneKinesisRecordProducerConfiguration {
     private KinesisRecordSerializer kinesisRecordSerializer;
 
     @Bean
-    public RecordProducer slowLaneRecordProducer() {
+    public RecordProducer<MessageRecord> slowLaneRecordProducer() {
         return new KinesisRecordProducer(slowLaneKinesisProducer, streamName, kinesisRecordSerializer);
     }
 
